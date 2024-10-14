@@ -11,24 +11,27 @@ function Note() {
     const db = getDatabase(app);
 
     useEffect(() => {
-        const noteRef = ref(db, `documents/${noteId}`);
+        if(noteId) {
+            const noteRef = ref(db, `notes/${noteId}`);
 
-        const unsubscribe = onValue(noteRef, (snapshot) => {
-            const data = snapshot.val();
-            if(data) {
-                setInputValue(data.content);
-            } else {
-                alert("no data");
-            }
-        });
-
-        return () => unsubscribe();
+            const unsubscribe = onValue(noteRef, (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    setInputValue(data.content);
+                } else {
+                    alert("no data");
+                }
+            });
+    
+            return () => unsubscribe();
+        }
+       
     }, [noteId]);
 
     const saveData = async () => {
         const noteRef = push(ref(db, "notes"));
         await set(noteRef, {
-            note : inputValue,
+            content : inputValue,
         }).then(() => {
             alert("succeeded");
         }).catch((error) => {

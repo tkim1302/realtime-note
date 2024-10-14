@@ -34,7 +34,7 @@ function Home() {
     }
 
     const handleGoToNote = () => {
-        navigate("/note");
+        navigate("/note/new");
     }
 
     const handleLogout = () => {
