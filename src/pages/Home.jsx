@@ -46,11 +46,11 @@ function Home() {
         <div>
             <h2>Homepage</h2>
             <button onClick={SignInWithGoogle}>Sign In With Google</button>
-            {!user && 
+            {user && "logged in"}
             <div>
                 <button onClick={handleGoToNote}>go to note</button>
                 <button onClick={handleLogout}>Logout</button>
-            </div>}
+            </div>
         </div>
     )
 }
