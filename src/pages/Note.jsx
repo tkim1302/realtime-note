@@ -28,18 +28,30 @@ function Note() {
        
     }, [noteId]);
 
-    const saveData = async () => {
-        const noteRef = push(ref(db, "notes"));
-        await set(noteRef, {
-            content : inputValue,
-        }).then(() => {
-            alert("succeeded");
-        }).catch((error) => {
-            alert(error);
-        })
-        
-        const noteId = noteRef.key;
-        navigate(`/note/${noteId}`);
+    const handleSubmit = async () => {
+        if (noteId === undefined) {
+            const noteRef = push(ref(db, "notes"));
+            await set(noteRef, {
+                content : inputValue,
+            }).then(() => {
+                alert("succeeded");
+            }).catch((error) => {
+                alert(error);
+            })
+            
+            const noteId = noteRef.key;
+            navigate(`/note/${noteId}`);
+        }
+        else {
+            const noteRef = ref(db, `notes/${noteId}`)
+            await set(noteRef, {
+                content : inputValue,
+            }).then(() => {
+                alert("update succeeded");
+            }).catch((error) => {
+                alert(error);
+            })
+        }
     }
 
     return (
@@ -51,7 +63,7 @@ function Note() {
             onChange={(e) => setInputValue(e.target.value)}/>
             <button
             className="bg-blue-500 w-24 h-16 rounded-xl"
-            onClick={saveData}>
+            onClick={handleSubmit}>
                 button
             </button>
         </div>
