@@ -45,10 +45,6 @@ function Note() {
                         setCursorPosition(opponentData[0][1].cursor);
                         setUserName(opponentData[0][1].name);
                     }
-                    else {
-                        setCursorPosition(null);
-                        setUserName(null);
-                    }
                 }
             })
             
