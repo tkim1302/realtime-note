@@ -8,6 +8,7 @@ function Note() {
     const { noteId } = useParams();
 
     const [inputValue, setInputValue] = useState("");
+    const [liveValue, setLiveValue] = useState("");
     const db = getDatabase(app);
 
     useEffect(() => {
@@ -18,6 +19,7 @@ function Note() {
                 const data = snapshot.val();
                 if(data) {
                     setInputValue(data.content);
+                    setLiveValue(data.content);
                 } else {
                     alert("no data");
                 }
@@ -43,6 +45,7 @@ function Note() {
             navigate(`/note/${noteId}`);
         }
         else {
+            setInputValue(liveValue);
             const noteRef = ref(db, `notes/${noteId}`)
             await set(noteRef, {
                 content : inputValue,
@@ -54,13 +57,28 @@ function Note() {
         }
     }
 
+    const liveChange = async (e) => {
+        setLiveValue(e.target.value);
+        if (noteId === undefined) {
+            setInputValue(liveValue);
+        }
+        else {
+            const noteRef = ref(db, `notes/${noteId}`)
+            await set(noteRef, {
+                content : liveValue,
+            }).catch((error) => {
+                alert(error);
+            })
+        }
+    }
+
     return (
         <div className="flex flex-col items-center justify-center h-screen gap-10">
             <textarea 
             className=" border border-black w-96 h-96 text-left align-top caret-blue-500 pl-5 pt-5 pb-5 pr-5" 
             type="text" 
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}/>
+            value={liveValue}
+            onChange={(e) => liveChange(e)}/>
             <button
             className="bg-blue-500 w-24 h-16 rounded-xl"
             onClick={handleSubmit}>
