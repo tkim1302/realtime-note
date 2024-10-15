@@ -20,8 +20,8 @@ function Home() {
       return () => unsubscribe();
     }, []);
 
-    const handleLogin = () => {
-        const userData = login();
+    const handleLogin = async () => {
+        const userData = await login();
         if(userData) setUser(userData);
     }
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { app } from "../firebase/firebase";
-import { getDatabase, ref, set, push, onValue } from "firebase/database";
+import { getDatabase, ref, set, push, onValue, get } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import useStore from "../utils/store";
 
@@ -18,9 +18,9 @@ function Note() {
     useEffect(() => {
         if(!user) {
             alert("login first");
-            navigate("/");
+            navigate("/login");
             return;
-        }
+        }   
         if(noteId) {
             const noteRef = ref(db, `notes/${noteId}`);
             const unsubscribeNote = onValue(noteRef, (snapshot) => {
@@ -36,7 +36,7 @@ function Note() {
             return () => unsubscribeNote();
         }
        
-    }, [noteId]);
+    }, [noteId, user, navigate]);
 
     const handleSubmit = async () => {
         if (noteId === undefined) {
@@ -83,11 +83,14 @@ function Note() {
 
     const handleCursorChange = async (e) => {
         const position = e.target.selectionStart;
+        const noteRef = ref(db, `notes/${noteId}`);
+        const snapshot = await get(noteRef);
+        const data = snapshot.val();
+        const content = data?.content || "";
 
-        const cursorRef = ref(db, `notes/${noteId}`);
-        await set(cursorRef, {
+        await set(noteRef, {
+            content : content,
             cursor : position,
-            user : uid,
         }).catch((error) => {
             alert(error);
         })
