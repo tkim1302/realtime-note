@@ -14,7 +14,6 @@ function Note() {
     useEffect(() => {
         if(noteId) {
             const noteRef = ref(db, `notes/${noteId}`);
-
             const unsubscribe = onValue(noteRef, (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
@@ -58,14 +57,15 @@ function Note() {
     }
 
     const liveChange = async (e) => {
-        setLiveValue(e.target.value);
+        const newVal = e.target.value;
+        setLiveValue(newVal);
         if (noteId === undefined) {
-            setInputValue(liveValue);
+            setInputValue(newVal);
         }
         else {
             const noteRef = ref(db, `notes/${noteId}`)
             await set(noteRef, {
-                content : liveValue,
+                content : newVal,
             }).catch((error) => {
                 alert(error);
             })
