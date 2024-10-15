@@ -15,11 +15,19 @@ function Login() {
             if(note) {
                 navigate(`/note/${note}`);
             }
+            else {
+                navigate("/note/list");
+            }
         }
     }
     useEffect(() => {
         if(user && note) {
-            navigate(`/note/${note}`);
+            if(note) {
+                navigate(`/note/${note}`);
+            }
+            else {
+                navigate("/note/list");
+            }
         }
     }, [user, navigate, note])
     

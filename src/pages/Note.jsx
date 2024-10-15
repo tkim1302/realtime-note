@@ -61,6 +61,7 @@ function Note() {
             const noteRef = push(ref(db, "notes"));
             await set(noteRef, {
                 content : inputValue,
+                user : uid,
             }).then(() => {
                 alert("succeeded");
             }).catch((error) => {
@@ -75,6 +76,7 @@ function Note() {
             const noteRef = ref(db, `notes/${noteId}`);
             await set(noteRef, {
                 content : inputValue,
+                user : uid,
             }).then(() => {
                 alert("update succeeded");
             }).catch((error) => {
@@ -127,6 +129,7 @@ function Note() {
             onClick={handleSubmit}>
                 button
             </button>
+            <button onClick={() => navigate("/note/list")}>Note List</button>
         </div>
     )
 }
