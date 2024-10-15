@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useStore from "../utils/store";
 
 function Note() {
-    const { user, setUser } = useStore();
+    const { user, setNote } = useStore();
     const navigate = useNavigate();
     const { noteId } = useParams();
     const [inputValue, setInputValue] = useState("");
@@ -18,6 +18,7 @@ function Note() {
     useEffect(() => {
         if(!user) {
             alert("login first");
+            if(noteId) setNote(noteId);
             navigate("/login");
             return;
         }   

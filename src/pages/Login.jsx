@@ -1,24 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import login from "../utils/login";
-import useStore
- from "../utils/store";
+import useStore from "../utils/store";
 import { useEffect } from "react";
+
 function Login() {
-    const { user, setUser } = useStore();
+    const { user, setUser, note } = useStore();
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+        e.preventDefault();
         const userData = await login();
         if(userData) {
             setUser(userData);
-            navigate(-2);
+            if(note) {
+                navigate(`/note/${note}`);
+            }
         }
     }
     useEffect(() => {
-        if(user) {
-            navigate(-2);
+        if(user && note) {
+            navigate(`/note/${note}`);
         }
-    }, [user, navigate])
+    }, [user, navigate, note])
     
 
     return (
