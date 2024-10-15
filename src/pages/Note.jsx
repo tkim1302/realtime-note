@@ -10,8 +10,10 @@ function Note() {
     const { noteId } = useParams();
     const [inputValue, setInputValue] = useState("");
     const [liveValue, setLiveValue] = useState("");
+    const [userName, setUserName] = useState("");
     const [cursorPosition, setCursorPosition] = useState(0);
     const uid = user?.uid || null;
+    const name = user?.displayName || null;
 
     const db = getDatabase(app);
 
@@ -33,8 +35,27 @@ function Note() {
                     alert("no data");
                 }
             });
+
+            const cursorRef = ref(db, `notes/${noteId}/cursors`);
+            const unsubscirbeCursors = onValue(cursorRef, (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    const opponentData = Object.entries(data).filter(([key]) => key !== uid); 
+                    if(opponentData.length > 0) {
+                        setCursorPosition(opponentData[0][1].cursor);
+                        setUserName(opponentData[0][1].name);
+                    }
+                    else {
+                        setCursorPosition(null);
+                        setUserName(null);
+                    }
+                }
+            })
             
-            return () => unsubscribeNote();
+            return () => {
+                unsubscribeNote();
+                unsubscirbeCursors();
+            }
         }
        
     }, [noteId, user, navigate]);
@@ -84,14 +105,11 @@ function Note() {
 
     const handleCursorChange = async (e) => {
         const position = e.target.selectionStart;
-        const noteRef = ref(db, `notes/${noteId}`);
-        const snapshot = await get(noteRef);
-        const data = snapshot.val();
-        const content = data?.content || "";
+        const noteRef = ref(db, `notes/${noteId}/cursors/${uid}`);
 
         await set(noteRef, {
-            content : content,
             cursor : position,
+            name : name,
         }).catch((error) => {
             alert(error);
         })
@@ -100,12 +118,14 @@ function Note() {
     return (
         <div className="flex flex-col items-center justify-center h-screen gap-10">
             <textarea 
-            className=" border border-black w-96 h-96 text-left align-top caret-blue-500 pl-5 pt-5 pb-5 pr-5" 
+            className= "border border-black w-96 h-96 text-left align-top caret-blue-500 pl-5 pt-5 pb-5 pr-5"
             type="text" 
             value={liveValue}
             onChange={(e) => liveChange(e)}
             onSelect={handleCursorChange}
             />
+            <div>{cursorPosition}</div>
+            <div>opponent : {userName}</div>
             <button
             className="bg-blue-500 w-24 h-16 rounded-xl"
             onClick={handleSubmit}>
