@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth";
+import { useEffect } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/firebase";
+import login from "../utils/login";
+import useStore from "../utils/store";
 
 function Home() {
-    const [user, setUser] = useState(null);
+    const { user, setUser } = useStore();
     const navigate = useNavigate();
   
     useEffect(() => {
@@ -19,18 +20,9 @@ function Home() {
       return () => unsubscribe();
     }, []);
 
-    const SignInWithGoogle = () => {
-
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-        .then((result) => {
-            const user = result.user;
-            alert(`Hi, ${user.displayName}`)
-            navigate("/");
-        }).catch((error) => {
-            const errorMessage = error.message;
-            alert(errorMessage);
-        })
+    const handleLogin = () => {
+        const userData = login();
+        if(userData) setUser(userData);
     }
 
     const handleGoToNote = () => {
@@ -45,7 +37,7 @@ function Home() {
     return (
         <div>
             <h2>Homepage</h2>
-            <button onClick={SignInWithGoogle}>Sign In With Google</button>
+            <button onClick={handleLogin}>Sign In With Google</button>
             {user && "logged in"}
             <div>
                 <button onClick={handleGoToNote}>go to note</button>

@@ -2,19 +2,28 @@ import { useEffect, useState } from "react";
 import { app } from "../firebase/firebase";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
+import useStore from "../utils/store";
 
 function Note() {
+    const { user, setUser } = useStore();
     const navigate = useNavigate();
     const { noteId } = useParams();
-
     const [inputValue, setInputValue] = useState("");
     const [liveValue, setLiveValue] = useState("");
+    const [cursorPosition, setCursorPosition] = useState(0);
+    const uid = user?.uid || null;
+
     const db = getDatabase(app);
 
     useEffect(() => {
+        if(!user) {
+            alert("login first");
+            navigate("/");
+            return;
+        }
         if(noteId) {
             const noteRef = ref(db, `notes/${noteId}`);
-            const unsubscribe = onValue(noteRef, (snapshot) => {
+            const unsubscribeNote = onValue(noteRef, (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
                     setInputValue(data.content);
@@ -23,8 +32,8 @@ function Note() {
                     alert("no data");
                 }
             });
-    
-            return () => unsubscribe();
+            
+            return () => unsubscribeNote();
         }
        
     }, [noteId]);
@@ -45,7 +54,7 @@ function Note() {
         }
         else {
             setInputValue(liveValue);
-            const noteRef = ref(db, `notes/${noteId}`)
+            const noteRef = ref(db, `notes/${noteId}`);
             await set(noteRef, {
                 content : inputValue,
             }).then(() => {
@@ -63,7 +72,7 @@ function Note() {
             setInputValue(newVal);
         }
         else {
-            const noteRef = ref(db, `notes/${noteId}`)
+            const noteRef = ref(db, `notes/${noteId}`);
             await set(noteRef, {
                 content : newVal,
             }).catch((error) => {
@@ -72,13 +81,27 @@ function Note() {
         }
     }
 
+    const handleCursorChange = async (e) => {
+        const position = e.target.selectionStart;
+
+        const cursorRef = ref(db, `notes/${noteId}`);
+        await set(cursorRef, {
+            cursor : position,
+            user : uid,
+        }).catch((error) => {
+            alert(error);
+        })
+    }
+
     return (
         <div className="flex flex-col items-center justify-center h-screen gap-10">
             <textarea 
             className=" border border-black w-96 h-96 text-left align-top caret-blue-500 pl-5 pt-5 pb-5 pr-5" 
             type="text" 
             value={liveValue}
-            onChange={(e) => liveChange(e)}/>
+            onChange={(e) => liveChange(e)}
+            onSelect={handleCursorChange}
+            />
             <button
             className="bg-blue-500 w-24 h-16 rounded-xl"
             onClick={handleSubmit}>
