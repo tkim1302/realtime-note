@@ -32,7 +32,6 @@ function Login() {
         }
     }, [user, navigate, note])
     
-
     return (
         <div className="flex justify-center">
             <div className="flex flex-col justify-center h-screen text-xl">

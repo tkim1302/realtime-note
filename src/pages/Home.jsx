@@ -5,6 +5,7 @@ import { auth } from "../firebase/firebase";
 import login from "../utils/login";
 import useStore from "../utils/store";
 import SignInWithGoogle from "../components/SignInWithGoogle";
+import Header from "../components/Header";
 
 function Home() {
     const { user, setUser } = useStore();
@@ -36,18 +37,19 @@ function Home() {
     }
 
     return (
-        <div className="flex justify-center">
-            <div className="flex flex-col justify-center h-screen text-xl">
-                <h2>Homepage</h2>
-                {user && "logged in"}
-                <div>
-                    {user ?
-                    (<div> 
-                        <button onClick={handleGoToNote}>go to note</button>
-                        <button className="" onClick={handleLogout}>Logout</button>
-                    </div>) :
-                        <SignInWithGoogle handleLogin={handleLogin} />
-                    }
+        <div>
+            <Header title={"home"}/>
+            <div className="flex justify-center">
+                <div className="flex flex-col justify-center h-screen text-xl">
+                    <div>
+                        {user ?
+                        (<div className="flex gap-12"> 
+                            <button className="bg-blue-500 w-36 h-12 rounded-xl" onClick={handleGoToNote}>go to note</button>
+                            <button className="bg-blue-500 w-36 h-12 rounded-xl" onClick={handleLogout}>Logout</button>
+                        </div>) :
+                            <SignInWithGoogle handleLogin={handleLogin} />
+                        }
+                    </div>
                 </div>
             </div>
         </div>

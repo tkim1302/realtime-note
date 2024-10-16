@@ -4,12 +4,12 @@ import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import useStore from "../utils/store";
 import SavedNotification from "../components/SavedNotification";
+import Header from "../components/Header";
 
 function Note() {
     const { user, setNote } = useStore();
     const navigate = useNavigate();
     const { noteId } = useParams();
-    const [inputValue, setInputValue] = useState("");
     const [liveValue, setLiveValue] = useState("");
     const [userName, setUserName] = useState("");
     const [cursorPosition, setCursorPosition] = useState(0);
@@ -36,7 +36,6 @@ function Note() {
             const unsubscribeNote = onValue(noteRef, (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
-                    setInputValue(data.content);
                     setLiveValue(data.content);
                 } else {
                     alert("no data");
@@ -111,10 +110,7 @@ function Note() {
     const liveChange = async (e) => {
         const newVal = e.target.value;
         setLiveValue(newVal);
-        if (noteId === undefined) {
-            setInputValue(newVal);
-        }
-        else {
+        if (noteId !== undefined) {
             const noteRef = ref(db, `notes/${noteId}`);
             await set(noteRef, {
                 content : newVal,
@@ -137,33 +133,36 @@ function Note() {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen gap-10">
-            {isSaved && 
-            <div className="flex items-end">
-                <SavedNotification />
-            </div>}
-            <textarea 
-            className= "border border-black w-96 h-96 text-left align-top caret-blue-500 pl-5 pt-5 pb-5 pr-5 rounded-xl text-black"
-            type="text" 
-            value={liveValue}
-            onChange={(e) => liveChange(e)}
-            onSelect={handleCursorChange}
-            />
-            <div className="text-gray-100">{cursorPosition}</div>
-            <div className="text-gray-100 font-bold text-xl">opponent : {userName}</div>
-            <div className="flex gap-16">
-                <button
-                className="bg-blue-500 w-24 h-16 rounded-xl"
-                onClick={() => handleSubmit(noteId)}
-                >
-                    button
-                </button>
-                <button 
-                className="bg-blue-500 w-24 h-16 rounded-xl" 
-                onClick={() => navigate("/note/list")}
-                >
-                    Note List
-                </button>
+        <div>
+            <Header title={"Note"}/>
+            <div className="relative flex flex-col items-center justify-center h-screen gap-10">
+                {isSaved && 
+                <div className="absolute flex top-16">
+                    <SavedNotification />
+                </div>}
+                <textarea 
+                className= "border border-black w-96 h-96 text-left align-top caret-blue-500 pl-5 pt-5 pb-5 pr-5 rounded-xl text-black"
+                type="text" 
+                value={liveValue}
+                onChange={(e) => liveChange(e)}
+                onSelect={handleCursorChange}
+                />
+                <div className="text-gray-100">{cursorPosition}</div>
+                <div className="text-gray-100 font-bold text-xl">opponent : {userName}</div>
+                <div className="flex gap-16">
+                    <button
+                    className="bg-blue-500 w-24 h-16 rounded-xl"
+                    onClick={() => handleSubmit(noteId)}
+                    >
+                        button
+                    </button>
+                    <button 
+                    className="bg-blue-500 w-24 h-16 rounded-xl" 
+                    onClick={() => navigate("/note/list")}
+                    >
+                        Note List
+                    </button>
+                </div>
             </div>
         </div>
     )
