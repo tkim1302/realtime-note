@@ -43,21 +43,27 @@ function NoteList() {
         }
     }, [uid, db]);
 
+    const handleClickNote = (noteId) => {
+        navigate(`/note/${noteId}`);
+    }
+
     return (
-        <div>
-            <div>
-                {isLoading ? ( <Loading /> ) :
-                (notes.length > 0 ? (
-                notes.map(([noteId, note]) => (
-                        <div key={noteId}>
-                            <p>{note.content}</p>
-                        </div>
-                    ))
-                    ) : (
-                    <p>No notes found</p>
-                ))}
+        <div className="flex justify-center mt-24 gap">
+            <div className="flex flex-col gap-24">
+                <div className="grid grid-cols-4 gap-12">
+                    {isLoading ? ( <Loading /> ) :
+                    (notes.length > 0 ? (
+                    notes.map(([noteId, note]) => (
+                            <div key={noteId} className="w-36 h-36 bg-blue-500 cursor-pointer" onClick={() => handleClickNote(noteId)}>
+                                <p className="break-words whitespace-normal">{note.content}</p>
+                            </div>
+                        ))
+                        ) : (
+                        <p>No notes found</p>
+                    ))}
+                </div>
+                <button onClick={() => navigate(-1)}>go back</button>
             </div>
-            <button onClick={() => navigate(-1)}>go back</button>
         </div>
     )
 }

@@ -16,17 +16,17 @@ function Login() {
                 navigate(`/note/${note}`);
             }
             else {
-                navigate("/note/list");
+                navigate("/");
             }
         }
     }
     useEffect(() => {
-        if(user && note) {
+        if(user) {
             if(note) {
                 navigate(`/note/${note}`);
             }
             else {
-                navigate("/note/list");
+                navigate("/");
             }
         }
     }, [user, navigate, note])
