@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { app } from "../firebase/firebase";
-import { getDatabase, ref, set, push, onValue, get } from "firebase/database";
+import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import useStore from "../utils/store";
+import SavedNotification from "../components/SavedNotification";
 
 function Note() {
     const { user, setNote } = useStore();
@@ -12,10 +13,16 @@ function Note() {
     const [liveValue, setLiveValue] = useState("");
     const [userName, setUserName] = useState("");
     const [cursorPosition, setCursorPosition] = useState(0);
+    const [isSaved, setIsSaved] = useState(false);
+    const liveValueRef = useRef(liveValue);
     const uid = user?.uid || null;
     const name = user?.displayName || null;
 
     const db = getDatabase(app);
+
+    useEffect(() => {
+       liveValueRef.current = liveValue; 
+    }, [liveValue])
 
     useEffect(() => {
         if(!user) {
@@ -56,33 +63,49 @@ function Note() {
        
     }, [noteId, user, navigate]);
 
-    const handleSubmit = async () => {
+    useEffect(() => {
+        const timerId = setInterval(() => {
+            handleSubmit(noteId);
+        }, 7000);
+
+        return () => clearInterval(timerId);
+    }, [noteId])
+
+
+    const handleSubmit = async (noteId) => {
+        const currentLiveValue = liveValueRef.current;
         if (noteId === undefined) {
             const noteRef = push(ref(db, "notes"));
             await set(noteRef, {
-                content : inputValue,
+                content : currentLiveValue,
                 user : uid,
             }).then(() => {
-                alert("succeeded");
+                showSavedMessage();
             }).catch((error) => {
                 alert(error);
             })
             
-            const noteId = noteRef.key;
-            navigate(`/note/${noteId}`);
+            const _noteId = noteRef.key;
+            navigate(`/note/${_noteId}`);
         }
         else {
-            setInputValue(liveValue);
             const noteRef = ref(db, `notes/${noteId}`);
             await set(noteRef, {
-                content : inputValue,
+                content : currentLiveValue,
                 user : uid,
             }).then(() => {
-                alert("update succeeded");
+                showSavedMessage();
             }).catch((error) => {
                 alert(error);
             })
         }
+    }
+
+    const showSavedMessage = () => {
+        setIsSaved(true);
+        setTimeout(() => {
+            setIsSaved(false);
+        }, 3000);
     }
 
     const liveChange = async (e) => {
@@ -115,21 +138,33 @@ function Note() {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen gap-10">
+            {isSaved && 
+            <div className="flex items-end">
+                <SavedNotification />
+            </div>}
             <textarea 
-            className= "border border-black w-96 h-96 text-left align-top caret-blue-500 pl-5 pt-5 pb-5 pr-5"
+            className= "border border-black w-96 h-96 text-left align-top caret-blue-500 pl-5 pt-5 pb-5 pr-5 rounded-xl text-black"
             type="text" 
             value={liveValue}
             onChange={(e) => liveChange(e)}
             onSelect={handleCursorChange}
             />
-            <div>{cursorPosition}</div>
-            <div>opponent : {userName}</div>
-            <button
-            className="bg-blue-500 w-24 h-16 rounded-xl"
-            onClick={handleSubmit}>
-                button
-            </button>
-            <button onClick={() => navigate("/note/list")}>Note List</button>
+            <div className="text-gray-100">{cursorPosition}</div>
+            <div className="text-gray-100 font-bold text-xl">opponent : {userName}</div>
+            <div className="flex gap-16">
+                <button
+                className="bg-blue-500 w-24 h-16 rounded-xl"
+                onClick={() => handleSubmit(noteId)}
+                >
+                    button
+                </button>
+                <button 
+                className="bg-blue-500 w-24 h-16 rounded-xl" 
+                onClick={() => navigate("/note/list")}
+                >
+                    Note List
+                </button>
+            </div>
         </div>
     )
 }

@@ -50,11 +50,11 @@ function NoteList() {
     return (
         <div className="flex justify-center mt-24 gap">
             <div className="flex flex-col gap-24">
-                <div className="grid grid-cols-4 gap-12">
+                <div className="grid grid-cols-3 gap-12">
                     {isLoading ? ( <Loading /> ) :
                     (notes.length > 0 ? (
                     notes.map(([noteId, note]) => (
-                            <div key={noteId} className="w-36 h-36 bg-blue-500 cursor-pointer" onClick={() => handleClickNote(noteId)}>
+                            <div key={noteId} className="w-56 h-56 bg-white text-black rounded-xl cursor-pointer pt-5 pl-2 pr-2 pb-2" onClick={() => handleClickNote(noteId)}>
                                 <p className="break-words whitespace-normal">{note.content}</p>
                             </div>
                         ))

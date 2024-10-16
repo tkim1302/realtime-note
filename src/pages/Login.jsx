@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import login from "../utils/login";
 import useStore from "../utils/store";
 import { useEffect } from "react";
+import SignInWithGoogle from "../components/SignInWithGoogle";
 
 function Login() {
     const { user, setUser, note } = useStore();
@@ -33,9 +34,11 @@ function Login() {
     
 
     return (
-        <button onClick={handleLogin}>
-            login
-        </button>
+        <div className="flex justify-center">
+            <div className="flex flex-col justify-center h-screen text-xl">
+                <SignInWithGoogle handleLogin={handleLogin} />
+            </div>
+        </div>
     )
 }
 
