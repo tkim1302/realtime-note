@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { app } from "../firebase/firebase";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,7 +18,7 @@ function Note() {
     const uid = user?.uid || null;
     const name = user?.displayName || null;
 
-    const db = getDatabase(app);
+    const db = useMemo(() => getDatabase(app), []);
 
     useEffect(() => {
        liveValueRef.current = liveValue; 
