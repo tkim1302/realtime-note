@@ -46,10 +46,10 @@ function Note() {
             const unsubscirbeCursors = onValue(cursorRef, (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
-                    const opponentData = Object.entries(data).filter(([key]) => key !== uid); 
-                    if(opponentData.length > 0) {
-                        setCursorPosition(opponentData[0][1].cursor);
-                        setUserName(opponentData[0][1].name);
+                    const collaboratorData = Object.entries(data).filter(([key]) => key !== uid); 
+                    if(collaboratorData.length > 0) {
+                        setCursorPosition(collaboratorData[0][1].cursor);
+                        setUserName(collaboratorData[0][1].name);
                     }
                 }
             })
@@ -60,7 +60,7 @@ function Note() {
             }
         }
        
-    }, [noteId, user, navigate]);
+    }, [noteId, user]);
 
     useEffect(() => {
         const timerId = setInterval(() => {
@@ -148,13 +148,13 @@ function Note() {
                 onSelect={handleCursorChange}
                 />
                 <div className="text-gray-100">{cursorPosition}</div>
-                <div className="text-gray-100 font-bold text-xl">opponent : {userName}</div>
+                <div className="text-gray-100 font-bold text-xl">collaborator : {userName}</div>
                 <div className="flex gap-16">
                     <button
                     className="bg-blue-500 w-24 h-16 rounded-xl"
                     onClick={() => handleSubmit(noteId)}
                     >
-                        button
+                        Save
                     </button>
                     <button 
                     className="bg-blue-500 w-24 h-16 rounded-xl" 
