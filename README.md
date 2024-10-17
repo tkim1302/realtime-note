@@ -6,7 +6,6 @@ RealTime Note는 단순 문서 저장 뿐 아니라, 동료와 협업하여 실�
 https://realtime-note7.netlify.app/
 
 # 주요 기능
-
 ### 문서 저장
 RealTime Note는 실시간 데이터 저장을 지원합니다 :
 - Save 버튼을 이용한 저장
@@ -21,7 +20,6 @@ RealTime Note는 협력자와의 실시간 협력도 지원합니다 :
 - 협력자의 문서 수정 - 실시간 업데이트를 보장합니다
 
 # 시작하기
-
 ### `npm 설치`
 ```
 npm install
