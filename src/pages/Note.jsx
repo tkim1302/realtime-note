@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useStore from "../utils/store";
 import SavedNotification from "../components/SavedNotification";
 import Header from "../components/Header";
+import getCaretCoordinates from "textarea-caret";
 
 function Note() {
     const { user, setNote } = useStore();
@@ -12,11 +13,12 @@ function Note() {
     const { noteId } = useParams();
     const [liveValue, setLiveValue] = useState("");
     const [userName, setUserName] = useState("");
-    const [cursorPosition, setCursorPosition] = useState(0);
     const [isSaved, setIsSaved] = useState(false);
     const liveValueRef = useRef(liveValue);
     const uid = user?.uid || null;
     const name = user?.displayName || null;
+    const [cursorPositionX, setCursorPositionX] = useState(0);
+    const [cursorPositionY, setCursorPositionY] = useState(0);
 
     const db = useMemo(() => getDatabase(app), []);
 
@@ -48,7 +50,10 @@ function Note() {
                 if(data) {
                     const collaboratorData = Object.entries(data).filter(([key]) => key !== uid); 
                     if(collaboratorData.length > 0) {
-                        setCursorPosition(collaboratorData[0][1].cursor);
+                        const collaborator = collaboratorData[0][1];
+                        setCursorPositionX(collaborator.cursorPositionX);
+                        setCursorPositionY(collaborator.cursorPositionY);
+                        setUserName(collaborator.name);
                         setUserName(collaboratorData[0][1].name);
                     }
                 }
@@ -65,7 +70,7 @@ function Note() {
     useEffect(() => {
         const timerId = setInterval(() => {
             handleSubmit(noteId);
-        }, 7000);
+        }, 20000);
 
         return () => clearInterval(timerId);
     }, [noteId])
@@ -122,11 +127,13 @@ function Note() {
 
     const handleCursorChange = async (e) => {
         const position = e.target.selectionStart;
+        const coordinates = getCaretCoordinates(e.target, position);
         const noteRef = ref(db, `notes/${noteId}/cursors/${uid}`);
 
         await set(noteRef, {
-            cursor : position,
             name : name,
+            cursorPositionX: coordinates.left,
+            cursorPositionY: coordinates.top,
         }).catch((error) => {
             alert(error);
         })
@@ -140,15 +147,27 @@ function Note() {
                 <div className="absolute flex top-16">
                     <SavedNotification />
                 </div>}
+                <div className="relative w-96 h-96">
                 <textarea 
-                className= "border border-black w-96 h-96 text-left align-top caret-blue-500 pl-5 pt-5 pb-5 pr-5 rounded-xl text-black"
+                className= "border border-black w-96 h-96 text-left align-top caret-red-500 pl-5 pt-5 pb-5 pr-5 rounded-xl text-black"
                 type="text" 
                 value={liveValue}
                 onChange={(e) => liveChange(e)}
                 onSelect={handleCursorChange}
                 />
-                <div className="text-gray-100">{cursorPosition}</div>
-                <div className="text-gray-100 font-bold text-xl">collaborator : {userName}</div>
+                <div 
+                className="absolute" style={{
+                    top: `${cursorPositionY}px`,
+                    left: `${cursorPositionX}px`,
+                }}>
+                    <div
+                    className="bg-blue-500 h-6 w-1"
+                    ></div>
+                </div>
+                </div>
+                <div className="text-gray-100 font-bold text-xl">
+                    collaborator : <span className="text-blue-500">{userName}</span>
+                </div>
                 <div className="flex gap-16">
                     <button
                     className="bg-blue-500 w-24 h-16 rounded-xl"
