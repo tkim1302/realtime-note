@@ -155,19 +155,23 @@ function Note() {
                 onChange={(e) => liveChange(e)}
                 onSelect={handleCursorChange}
                 />
-                <div 
-                className="absolute" style={{
-                    top: `${cursorPositionY}px`,
-                    left: `${cursorPositionX}px`,
-                }}>
-                    <div
-                    className="bg-blue-500 h-6 w-1"
-                    ></div>
+                {userName !== "" && 
+                    <div 
+                    className="absolute" style={{
+                        top: `${cursorPositionY}px`,
+                        left: `${cursorPositionX}px`,
+                    }}>
+                        <div
+                        className="bg-blue-500 h-6 w-1"
+                        ></div>
+                    </div>
+                }
                 </div>
-                </div>
-                <div className="text-gray-100 font-bold text-xl">
-                    collaborator : <span className="text-blue-500">{userName}</span>
-                </div>
+                {userName !== "" && 
+                    <div className="text-gray-100 font-bold text-xl">
+                        collaborator : <span className="text-blue-500">{userName}</span>
+                    </div>
+                }
                 <div className="flex gap-16">
                     <button
                     className="bg-blue-500 w-24 h-16 rounded-xl"
