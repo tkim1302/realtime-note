@@ -47,7 +47,7 @@ const Home = () => {
 
   return (
     <div>
-      <Header title={"home"} />
+      <Header />
       <div className="flex justify-center">
         <div className="flex flex-col justify-center h-screen text-xl">
           <div>

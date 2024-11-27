@@ -150,7 +150,7 @@ const Note = () => {
 
   return (
     <div>
-      <Header title={"Note"} />
+      <Header />
       <div className="relative flex flex-col items-center justify-center h-screen gap-10">
         {isSaved && (
           <div className="absolute flex top-16">

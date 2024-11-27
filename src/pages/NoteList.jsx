@@ -67,7 +67,7 @@ const NoteList = () => {
 
   return (
     <div>
-      <Header title={"Note List"} />
+      <Header />
       <div className="flex justify-center mt-24 gap">
         <div className="flex flex-col gap-24">
           <div className="grid grid-cols-3 gap-12">
