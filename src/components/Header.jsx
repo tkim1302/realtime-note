@@ -1,4 +1,5 @@
 import useStore from "../utils/store";
+import ProfileImg from "./ProfileImg";
 
 const Header = () => {
   const { user } = useStore();
@@ -8,12 +9,7 @@ const Header = () => {
       {user && (
         <div className="mr-14">
           <div className="flex gap-5">
-            <img
-              src={user.photoURL}
-              alt="profile picture"
-              className="rounded-full w-12 h-12"
-            />
-            <p className="mt-4">{user.displayName}</p>
+            <ProfileImg user={user} />
           </div>
         </div>
       )}
