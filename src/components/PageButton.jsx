@@ -1,29 +1,34 @@
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 const PageButton = ({ totalPages, currPage, setCurrPage }) => {
   const navigate = useNavigate();
+  const debounceTimer = useRef(null);
 
-  const handlePageChange = (page) => {
-    setCurrPage(Number(page));
-
-    navigate(`?page=${page}`);
+  const debouncedNavigate = (newPage) => {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+    debounceTimer.current = setTimeout(() => {
+      setCurrPage(newPage);
+      navigate(`?page=${newPage}`);
+    }, 200);
   };
 
   const handleClickPrev = () => {
     if (currPage > 1) {
       const newPage = currPage - 1;
-      setCurrPage(newPage);
-      navigate(`?page=${newPage}`);
+      debouncedNavigate(newPage);
     }
   };
 
   const handleClickNext = () => {
     if (currPage < totalPages) {
       const newPage = currPage + 1;
-      setCurrPage(newPage);
-      navigate(`?page=${newPage}`);
+      debouncedNavigate(newPage);
     }
   };
+
   return (
     <div className="text-white text-xl flex gap-2">
       <button onClick={() => handleClickPrev()}>prev</button>
@@ -41,7 +46,7 @@ const PageButton = ({ totalPages, currPage, setCurrPage }) => {
             }`}
             key={page}
             value={page}
-            onClick={(e) => handlePageChange(e.target.value)}
+            onClick={(e) => debouncedNavigate(Number(e.target.value))}
           >
             {page}
           </button>

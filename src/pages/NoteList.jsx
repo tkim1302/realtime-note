@@ -10,6 +10,7 @@ import useStore from "../utils/store";
 const NoteList = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useStore();
 
   const db = getDatabase(app);
   const [notes, setNotes] = useState([]);
@@ -20,7 +21,6 @@ const NoteList = () => {
   const [currPage, setCurrPage] = useState(initialPage);
 
   const notesPerPage = 9;
-  const { user } = useStore();
 
   useEffect(() => {
     const listRef = ref(db, "notes/");
