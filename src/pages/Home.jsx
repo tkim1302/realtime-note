@@ -9,63 +9,79 @@ import Header from "../components/Header";
 import Loading from "../components/Loading";
 
 function Home() {
-    const { user, setUser } = useStore();
-    const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
+  const { user, setUser } = useStore();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if(user) {
-          setUser(user);
-          return;
-        }
-        
-        setUser(null);
-      });
-      return () => unsubscribe();
-    }, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        return;
+      }
 
-    const handleLogin = async () => {
-        setIsLoading(true);
-        const userData = await login();
-        setIsLoading(false);
-        if(userData) setUser(userData);
-    }
+      setUser(null);
+    });
+    return () => unsubscribe();
+  }, []);
 
-    const handleClickNewNote = () => {
-        navigate("/note/new");
-    }
+  const handleLogin = async () => {
+    setIsLoading(true);
+    const userData = await login();
+    setIsLoading(false);
+    if (userData) setUser(userData);
+  };
 
-    const handleClickNoteList = () => {
-        navigate("/note/list");
-    }
+  const handleClickNewNote = () => {
+    navigate("/note/new");
+  };
 
-    const handleLogout = () => {
-        signOut(auth);
-        setUser(null);
-    }
+  const handleClickNoteList = () => {
+    navigate("/note/list");
+  };
 
-    return (
-        <div>
-            <Header title={"home"}/>
-            <div className="flex justify-center">
-                <div className="flex flex-col justify-center h-screen text-xl">
-                    <div>
-                        {user ?
-                        (<div className="flex gap-12"> 
-                            <button className="bg-blue-500 w-36 h-12 rounded-xl" onClick={handleClickNewNote}>New Note</button>
-                            <button className="bg-blue-500 w-36 h-12 rounded-xl" onClick={handleClickNoteList}>Note List</button>
-                            <button className="bg-blue-500 w-36 h-12 rounded-xl" onClick={handleLogout}>Logout</button>
-                        </div>) :
-                            (!isLoading ? 
-                            <SignInWithGoogle handleLogin={handleLogin} /> : 
-                            <Loading />)
-                        }
-                    </div>
-                </div>
-            </div>
+  const handleLogout = () => {
+    signOut(auth);
+    setUser(null);
+  };
+
+  return (
+    <div>
+      <Header title={"home"} />
+      <div className="flex justify-center">
+        <div className="flex flex-col justify-center h-screen text-xl">
+          <div>
+            {user ? (
+              <div className="flex gap-12">
+                <button
+                  className="bg-blue-500 w-36 h-12 rounded-xl"
+                  onClick={handleClickNewNote}
+                >
+                  New Note
+                </button>
+                <button
+                  className="bg-blue-500 w-36 h-12 rounded-xl"
+                  onClick={handleClickNoteList}
+                >
+                  Note List
+                </button>
+                <button
+                  className="bg-blue-500 w-36 h-12 rounded-xl"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : !isLoading ? (
+              <SignInWithGoogle handleLogin={handleLogin} />
+            ) : (
+              <Loading />
+            )}
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
 
 export default Home;
