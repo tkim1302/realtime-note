@@ -1,48 +1,50 @@
 import { get, getDatabase, ref } from "firebase/database";
 import { useNavigate } from "react-router-dom";
-import { app } from "../firebase/firebase";
-import useStore from "../utils/store";
+import { app, auth } from "../firebase/firebase";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Header from "../components/Header";
+import { onAuthStateChanged } from "firebase/auth";
 
 function NoteList() {
-  const { user } = useStore();
   const navigate = useNavigate();
-  const uid = user?.uid || null;
+
   const db = getDatabase(app);
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (uid) {
-      const listRef = ref(db, "notes/");
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const listRef = ref(db, "notes/");
 
-      get(listRef)
-        .then((snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            const noteList = Object.entries(data).filter(
-              ([key, note]) => note.user === uid
-            );
-            setNotes(noteList);
-            setIsLoading(false);
-          } else {
-            alert("no data");
-            setIsLoading(false);
-          }
-        })
-        .catch((error) => {
-          alert(error);
-        });
-    } else {
-      if (!user) {
+        get(listRef)
+          .then((snapshot) => {
+            const data = snapshot.val();
+
+            if (data) {
+              const noteList = Object.entries(data).filter(
+                ([, note]) => note.user === user.uid
+              );
+
+              setNotes(noteList);
+              setIsLoading(false);
+            } else {
+              alert("no data");
+              setIsLoading(false);
+            }
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      } else {
         alert("login first");
         navigate("/login");
-        return;
       }
-    }
-  }, [uid, db]);
+    });
+
+    return () => unsubscribe();
+  }, [db, navigate]);
 
   const handleClickNote = (noteId) => {
     navigate(`/note/${noteId}`);
