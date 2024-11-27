@@ -62,30 +62,33 @@ const NoteList = () => {
       <Header />
       <div className="flex justify-center mt-12 gap h-full">
         <div className="flex flex-col gap-24">
-          <div className="grid grid-cols-3 gap-12">
+          <div>
             {isLoading ? (
               <Loading />
             ) : currPageNotes.length > 0 ? (
-              currPageNotes.map(([noteId, note]) => (
-                <div
-                  key={noteId}
-                  className="transition ease-in-out hover:-translate-y-3 hover:scale-110 w-56 h-56 bg-white text-black rounded-xl cursor-pointer pt-5 pl-2 pr-2 pb-2"
-                  onClick={() => handleClickNote(noteId)}
-                >
-                  <p className="break-words whitespace-normal">
-                    {note.content}
-                  </p>
-                </div>
-              ))
+              <div className="grid grid-cols-3 gap-12">
+                {currPageNotes.map(([noteId, note]) => (
+                  <div
+                    key={noteId}
+                    className="transition ease-in-out hover:-translate-y-3 hover:scale-110 w-56 h-56 bg-white text-black rounded-xl cursor-pointer pt-5 pl-2 pr-2 pb-2"
+                    onClick={() => handleClickNote(noteId)}
+                  >
+                    <p className="break-words whitespace-normal">
+                      {note.content}
+                    </p>
+                  </div>
+                ))}
+                <PageButton
+                  totalPages={totalPages}
+                  currPage={currPage}
+                  setCurrPage={setCurrPage}
+                />
+              </div>
             ) : (
               <p>No notes found</p>
             )}
           </div>
-          <PageButton
-            totalPages={totalPages}
-            currPage={currPage}
-            setCurrPage={setCurrPage}
-          />
+
           <button
             className="bg-blue-500 w-36 h-12 rounded-xl"
             onClick={() => navigate(-1)}
