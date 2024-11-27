@@ -1,17 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { app, auth } from "../firebase/firebase";
+import { app } from "../firebase/firebase";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import useStore from "../utils/store";
 import SavedNotification from "../components/SavedNotification";
 import Header from "../components/Header";
 import getCaretCoordinates from "textarea-caret";
-import { onAuthStateChanged } from "firebase/auth";
 
 const Note = () => {
-  const { user, setUser, setNote } = useStore();
-  const navigate = useNavigate();
+  const { user } = useStore();
   const { noteId } = useParams();
+  const navigate = useNavigate();
   const [liveValue, setLiveValue] = useState("");
   const [userName, setUserName] = useState("");
   const [isSaved, setIsSaved] = useState(false);
@@ -24,20 +23,6 @@ const Note = () => {
   useEffect(() => {
     liveValueRef.current = liveValue;
   }, [liveValue]);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-        if (noteId) setNote(noteId);
-        navigate("/login");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [setUser, setNote, noteId, navigate]);
 
   useEffect(() => {
     if (noteId) {

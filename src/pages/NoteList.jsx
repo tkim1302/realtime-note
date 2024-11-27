@@ -1,11 +1,11 @@
 import { get, getDatabase, ref } from "firebase/database";
 import { useLocation, useNavigate } from "react-router-dom";
-import { app, auth } from "../firebase/firebase";
+import { app } from "../firebase/firebase";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Header from "../components/Header";
-import { onAuthStateChanged } from "firebase/auth";
 import PageButton from "../components/PageButton";
+import useStore from "../utils/store";
 
 const NoteList = () => {
   const navigate = useNavigate();
@@ -20,40 +20,32 @@ const NoteList = () => {
   const [currPage, setCurrPage] = useState(initialPage);
 
   const notesPerPage = 9;
+  const { user } = useStore();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const listRef = ref(db, "notes/");
+    const listRef = ref(db, "notes/");
 
-        get(listRef)
-          .then((snapshot) => {
-            const data = snapshot.val();
+    get(listRef)
+      .then((snapshot) => {
+        const data = snapshot.val();
 
-            if (data) {
-              const noteList = Object.entries(data).filter(
-                ([, note]) => note.user === user.uid
-              );
+        if (data) {
+          const noteList = Object.entries(data).filter(
+            ([, note]) => note.user === user.uid
+          );
 
-              setNotes(noteList);
-              setIsLoading(false);
-              navigate(`?page=${initialPage}`);
-            } else {
-              alert("no data");
-              setIsLoading(false);
-            }
-          })
-          .catch((error) => {
-            alert(error);
-          });
-      } else {
-        alert("login first");
-        navigate("/login");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [db, navigate, initialPage]);
+          setNotes(noteList);
+          setIsLoading(false);
+          navigate(`?page=${initialPage}`);
+        } else {
+          alert("no data");
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  }, [db, user.uid, navigate, initialPage]);
 
   const handleClickNote = (noteId) => {
     navigate(`/note/${noteId}`);
