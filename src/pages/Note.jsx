@@ -1,22 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { app } from "../firebase/firebase";
+import { app, auth } from "../firebase/firebase";
 import { getDatabase, ref, set, push, onValue } from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import useStore from "../utils/store";
 import SavedNotification from "../components/SavedNotification";
 import Header from "../components/Header";
 import getCaretCoordinates from "textarea-caret";
+import { onAuthStateChanged } from "firebase/auth";
 
 function Note() {
-  const { user, setNote } = useStore();
+  const { user, setUser, setNote } = useStore();
   const navigate = useNavigate();
   const { noteId } = useParams();
   const [liveValue, setLiveValue] = useState("");
   const [userName, setUserName] = useState("");
   const [isSaved, setIsSaved] = useState(false);
   const liveValueRef = useRef(liveValue);
-  const uid = user?.uid || null;
-  const name = user?.displayName || null;
   const [cursorPositionX, setCursorPositionX] = useState(0);
   const [cursorPositionY, setCursorPositionY] = useState(0);
 
@@ -27,12 +26,20 @@ function Note() {
   }, [liveValue]);
 
   useEffect(() => {
-    if (!user) {
-      alert("login first");
-      if (noteId) setNote(noteId);
-      navigate("/login");
-      return;
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+        if (noteId) setNote(noteId);
+        navigate("/login");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [setUser, setNote, noteId, navigate]);
+
+  useEffect(() => {
     if (noteId) {
       const noteRef = ref(db, `notes/${noteId}`);
       const unsubscribeNote = onValue(noteRef, (snapshot) => {
@@ -40,33 +47,32 @@ function Note() {
         if (data) {
           setLiveValue(data.content);
         } else {
-          alert("no data");
+          alert("No data found");
         }
       });
 
       const cursorRef = ref(db, `notes/${noteId}/cursors`);
-      const unsubscirbeCursors = onValue(cursorRef, (snapshot) => {
+      const unsubscribeCursors = onValue(cursorRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
           const collaboratorData = Object.entries(data).filter(
-            ([key]) => key !== uid
+            ([key]) => key !== user?.uid
           );
           if (collaboratorData.length > 0) {
             const collaborator = collaboratorData[0][1];
             setCursorPositionX(collaborator.cursorPositionX);
             setCursorPositionY(collaborator.cursorPositionY);
             setUserName(collaborator.name);
-            setUserName(collaboratorData[0][1].name);
           }
         }
       });
 
       return () => {
         unsubscribeNote();
-        unsubscirbeCursors();
+        unsubscribeCursors();
       };
     }
-  }, [noteId, user]);
+  }, [noteId, db, user?.uid]);
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -78,17 +84,17 @@ function Note() {
 
   const handleSubmit = async (noteId) => {
     const currentLiveValue = liveValueRef.current;
-    if (noteId === undefined) {
+    if (!noteId) {
       const noteRef = push(ref(db, "notes"));
       await set(noteRef, {
         content: currentLiveValue,
-        user: uid,
+        user: user?.uid,
       })
         .then(() => {
           showSavedMessage();
         })
         .catch((error) => {
-          alert(error);
+          alert(error.message);
         });
 
       const _noteId = noteRef.key;
@@ -97,13 +103,13 @@ function Note() {
       const noteRef = ref(db, `notes/${noteId}`);
       await set(noteRef, {
         content: currentLiveValue,
-        user: uid,
+        user: user?.uid,
       })
         .then(() => {
           showSavedMessage();
         })
         .catch((error) => {
-          alert(error);
+          alert(error.message);
         });
     }
   };
@@ -118,12 +124,12 @@ function Note() {
   const liveChange = async (e) => {
     const newVal = e.target.value;
     setLiveValue(newVal);
-    if (noteId !== undefined) {
+    if (noteId) {
       const noteRef = ref(db, `notes/${noteId}`);
       await set(noteRef, {
         content: newVal,
       }).catch((error) => {
-        alert(error);
+        alert(error.message);
       });
     }
   };
@@ -131,14 +137,14 @@ function Note() {
   const handleCursorChange = async (e) => {
     const position = e.target.selectionStart;
     const coordinates = getCaretCoordinates(e.target, position);
-    const noteRef = ref(db, `notes/${noteId}/cursors/${uid}`);
+    const noteRef = ref(db, `notes/${noteId}/cursors/${user?.uid}`);
 
     await set(noteRef, {
-      name: name,
+      name: user?.displayName,
       cursorPositionX: coordinates.left,
       cursorPositionY: coordinates.top,
     }).catch((error) => {
-      alert(error);
+      alert(error.message);
     });
   };
 
@@ -159,7 +165,7 @@ function Note() {
             onChange={(e) => liveChange(e)}
             onSelect={handleCursorChange}
           />
-          {userName !== "" && (
+          {userName && (
             <div
               className="absolute"
               style={{
@@ -171,9 +177,9 @@ function Note() {
             </div>
           )}
         </div>
-        {userName !== "" && (
+        {userName && (
           <div className="text-gray-100 font-bold text-xl">
-            collaborator : <span className="text-blue-500">{userName}</span>
+            collaborator: <span className="text-blue-500">{userName}</span>
           </div>
         )}
         <div className="flex gap-16">
