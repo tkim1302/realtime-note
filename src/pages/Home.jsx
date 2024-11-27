@@ -13,25 +13,23 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <Header />
-      <div className="flex justify-center">
-        <div className="flex flex-col justify-center h-screen text-xl">
-          <div>
-            <div className="flex gap-12">
-              <button
-                className="bg-blue-500 w-36 h-12 rounded-xl"
-                onClick={handleClickNewNote}
-              >
-                New Note
-              </button>
-              <button
-                className="bg-blue-500 w-36 h-12 rounded-xl"
-                onClick={handleClickNoteList}
-              >
-                Note List
-              </button>
-            </div>
+      <div className="flex h-full justify-center items-center">
+        <div>
+          <div className="flex flex-col gap-12 w-screen items-center ">
+            <button
+              className="bg-blue-500 w-1/2 h-24 rounded-xl hover:opacity-70"
+              onClick={handleClickNewNote}
+            >
+              New Note
+            </button>
+            <button
+              className="bg-blue-500 w-1/2 h-24 rounded-xl hover:opacity-70"
+              onClick={handleClickNoteList}
+            >
+              Note List
+            </button>
           </div>
         </div>
       </div>

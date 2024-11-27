@@ -134,9 +134,9 @@ const Note = () => {
   };
 
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <Header />
-      <div className="relative flex flex-col items-center justify-center h-screen gap-10">
+      <div className="relative flex flex-col items-center justify-center h-full gap-10">
         {isSaved && (
           <div className="absolute flex top-16">
             <SavedNotification />

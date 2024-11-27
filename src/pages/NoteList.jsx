@@ -58,9 +58,9 @@ const NoteList = () => {
   );
 
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <Header />
-      <div className="flex justify-center mt-24 gap">
+      <div className="flex justify-center mt-12 gap h-full">
         <div className="flex flex-col gap-24">
           <div className="grid grid-cols-3 gap-12">
             {isLoading ? (

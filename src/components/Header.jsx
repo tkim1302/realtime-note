@@ -7,9 +7,9 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between mt-8">
+    <div className="flex justify-between pt-8">
       <h1
-        className="text-white text-4xl ml-14 font-bold cursor-pointer"
+        className="text-4xl ml-14 font-bold cursor-pointer"
         onClick={() => navigate("/")}
       >
         RealtimeNote
