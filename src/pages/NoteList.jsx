@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import { onAuthStateChanged } from "firebase/auth";
 import PageButton from "../components/PageButton";
 
-function NoteList() {
+const NoteList = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -104,6 +104,6 @@ function NoteList() {
       </div>
     </div>
   );
-}
+};
 
 export default NoteList;

@@ -1,4 +1,4 @@
-function SignInWithGoogle({ handleLogin }) {
+const SignInWithGoogle = ({ handleLogin }) => {
   return (
     <div className="flex w-80 h-28 rounded-xl bg-white gap-5">
       <img
@@ -11,6 +11,6 @@ function SignInWithGoogle({ handleLogin }) {
       </button>
     </div>
   );
-}
+};
 
 export default SignInWithGoogle;

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import SignInWithGoogle from "../components/SignInWithGoogle";
 import Loading from "../components/Loading";
 
-function Login() {
+const Login = () => {
   const { user, setUser, note } = useStore();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +45,6 @@ function Login() {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

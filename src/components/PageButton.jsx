@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function PageButton({ totalPages, currPage, setCurrPage }) {
+const PageButton = ({ totalPages, currPage, setCurrPage }) => {
   const navigate = useNavigate();
 
   const handlePageChange = (page) => {
@@ -49,6 +49,6 @@ function PageButton({ totalPages, currPage, setCurrPage }) {
       <button onClick={() => handleClickNext()}>next</button>
     </div>
   );
-}
+};
 
 export default PageButton;

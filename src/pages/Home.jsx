@@ -8,7 +8,7 @@ import SignInWithGoogle from "../components/SignInWithGoogle";
 import Header from "../components/Header";
 import Loading from "../components/Loading";
 
-function Home() {
+const Home = () => {
   const { user, setUser } = useStore();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -82,6 +82,6 @@ function Home() {
       </div>
     </div>
   );
-}
+};
 
 export default Home;

@@ -1,6 +1,6 @@
 import useStore from "../utils/store";
 
-function Header({ title }) {
+const Header = ({ title }) => {
   const { user } = useStore();
   return (
     <div className="flex justify-between mt-8">
@@ -19,6 +19,6 @@ function Header({ title }) {
       )}
     </div>
   );
-}
+};
 
 export default Header;

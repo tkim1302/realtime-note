@@ -5,7 +5,7 @@ import Note from "./pages/Note";
 import Login from "./pages/Login";
 import NoteList from "./pages/NoteList";
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <Routes>
@@ -17,6 +17,6 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

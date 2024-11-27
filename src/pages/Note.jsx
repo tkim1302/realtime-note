@@ -8,7 +8,7 @@ import Header from "../components/Header";
 import getCaretCoordinates from "textarea-caret";
 import { onAuthStateChanged } from "firebase/auth";
 
-function Note() {
+const Note = () => {
   const { user, setUser, setNote } = useStore();
   const navigate = useNavigate();
   const { noteId } = useParams();
@@ -199,6 +199,6 @@ function Note() {
       </div>
     </div>
   );
-}
+};
 
 export default Note;
