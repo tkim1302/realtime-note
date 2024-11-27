@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const SignInWithGoogle = ({ handleLogin }) => {
   return (
     <div className="flex w-80 h-28 rounded-xl bg-white gap-5">
@@ -11,6 +13,10 @@ const SignInWithGoogle = ({ handleLogin }) => {
       </button>
     </div>
   );
+};
+
+SignInWithGoogle.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
 };
 
 export default SignInWithGoogle;

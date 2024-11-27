@@ -1,6 +1,7 @@
 import { signOut } from "firebase/auth";
 import { useState } from "react";
 import { auth } from "../firebase/firebase";
+import PropTypes from "prop-types";
 
 const ProfileImg = ({ user }) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -24,6 +25,12 @@ const ProfileImg = ({ user }) => {
       )}
     </div>
   );
+};
+
+ProfileImg.propTypes = {
+  user: PropTypes.shape({
+    photoURL: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default ProfileImg;

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 
@@ -54,6 +55,12 @@ const PageButton = ({ totalPages, currPage, setCurrPage }) => {
       <button onClick={() => handleClickNext()}>next</button>
     </div>
   );
+};
+
+PageButton.propTypes = {
+  totalPages: PropTypes.number.isRequired,
+  currPage: PropTypes.number.isRequired,
+  setCurrPage: PropTypes.func.isRequired,
 };
 
 export default PageButton;
