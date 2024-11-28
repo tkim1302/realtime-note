@@ -23,6 +23,7 @@ const Note = () => {
   const [userName, setUserName] = useState("");
   const [isSaved, setIsSaved] = useState(false);
   const liveValueRef = useRef(liveValue);
+  const autoSaveTimerRef = useRef(null);
   const [cursorPositionX, setCursorPositionX] = useState(0);
   const [cursorPositionY, setCursorPositionY] = useState(0);
 
@@ -68,12 +69,24 @@ const Note = () => {
   }, [noteId, db, user?.uid]);
 
   useEffect(() => {
-    const timerId = setInterval(() => {
+    startTimer();
+
+    return () => clearTimer();
+  }, [noteId]);
+
+  const startTimer = () => {
+    clearTimer();
+    autoSaveTimerRef.current = setInterval(() => {
       handleSubmit(noteId);
     }, 20000);
+  };
 
-    return () => clearInterval(timerId);
-  }, [noteId]);
+  const clearTimer = () => {
+    if (autoSaveTimerRef.current) {
+      clearInterval(autoSaveTimerRef.current);
+      autoSaveTimerRef.current = null;
+    }
+  };
 
   const handleSubmit = async (noteId) => {
     const currentLiveValue = liveValueRef.current;
@@ -85,6 +98,7 @@ const Note = () => {
       })
         .then(() => {
           showSavedMessage();
+          startTimer();
         })
         .catch((error) => {
           alert(error.message);
