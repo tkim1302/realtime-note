@@ -30,10 +30,9 @@ const NoteList = () => {
         const data = snapshot.val();
 
         if (data) {
-          const noteList = Object.entries(data).filter(
-            ([, note]) => note.user === user.uid
+          const noteList = Object.entries(data).filter(([, note]) =>
+            note.users.includes(user.uid)
           );
-
           setNotes(noteList);
           setIsLoading(false);
           navigate(`?page=${initialPage}`);
@@ -61,40 +60,51 @@ const NoteList = () => {
     <div className="h-screen flex flex-col">
       <Header />
       <div className="flex justify-center mt-12 gap h-full">
-        <div className="flex flex-col gap-24">
+        <div className="flex flex-col">
           <div>
             {isLoading ? (
               <Loading />
             ) : currPageNotes.length > 0 ? (
-              <div className="grid grid-cols-3 gap-12">
-                {currPageNotes.map(([noteId, note]) => (
-                  <div
-                    key={noteId}
-                    className="transition ease-in-out hover:-translate-y-3 hover:scale-110 w-56 h-56 bg-white text-black rounded-xl cursor-pointer pt-5 pl-2 pr-2 pb-2"
-                    onClick={() => handleClickNote(noteId)}
-                  >
-                    <p className="break-words whitespace-normal">
-                      {note.content}
-                    </p>
-                  </div>
-                ))}
-                <PageButton
-                  totalPages={totalPages}
-                  currPage={currPage}
-                  setCurrPage={setCurrPage}
-                />
+              <div>
+                <div className="grid grid-cols-3 gap-12">
+                  {currPageNotes.map(([noteId, note]) => (
+                    <div
+                      key={noteId}
+                      className="transition ease-in-out hover:-translate-y-3 hover:scale-110 w-56 h-56 bg-white text-black rounded-xl cursor-pointer p-3 truncate"
+                      onClick={() => handleClickNote(noteId)}
+                    >
+                      <p className="break-words whitespace-normal">
+                        {note.content}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex justify-center mt-6">
+                  <PageButton
+                    totalPages={totalPages}
+                    currPage={currPage}
+                    setCurrPage={setCurrPage}
+                  />
+                </div>
               </div>
             ) : (
               <p>No notes found</p>
             )}
           </div>
 
-          <button
-            className="bg-blue-500 w-36 h-12 rounded-xl"
-            onClick={() => navigate(-1)}
-          >
-            Back
-          </button>
+          {isLoading ? (
+            ""
+          ) : (
+            <div className="flex justify-end">
+              <button
+                className="bg-blue-500 w-36 h-12 rounded-xl"
+                onClick={() => navigate(-1)}
+              >
+                Back
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

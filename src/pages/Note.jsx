@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { app } from "../firebase/firebase";
-import { getDatabase, ref, set, push, onValue } from "firebase/database";
+import {
+  getDatabase,
+  get,
+  ref,
+  set,
+  push,
+  onValue,
+  update,
+} from "firebase/database";
 import { useNavigate, useParams } from "react-router-dom";
 import useStore from "../utils/store";
 import SavedNotification from "../components/SavedNotification";
@@ -73,7 +81,7 @@ const Note = () => {
       const noteRef = push(ref(db, "notes"));
       await set(noteRef, {
         content: currentLiveValue,
-        user: user?.uid,
+        users: [user?.uid],
       })
         .then(() => {
           showSavedMessage();
@@ -86,16 +94,26 @@ const Note = () => {
       navigate(`/note/${_noteId}`);
     } else {
       const noteRef = ref(db, `notes/${noteId}`);
-      await set(noteRef, {
-        content: currentLiveValue,
-        user: user?.uid,
-      })
-        .then(() => {
-          showSavedMessage();
+      const snapshot = await get(noteRef);
+
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const existingUsers = data.users || [];
+
+        if (!existingUsers.includes(user.uid)) {
+          existingUsers.push(user.uid);
+        }
+        await update(noteRef, {
+          content: currentLiveValue,
+          users: existingUsers,
         })
-        .catch((error) => {
-          alert(error.message);
-        });
+          .then(() => {
+            showSavedMessage();
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      }
     }
   };
 
@@ -111,7 +129,7 @@ const Note = () => {
     setLiveValue(newVal);
     if (noteId) {
       const noteRef = ref(db, `notes/${noteId}`);
-      await set(noteRef, {
+      await update(noteRef, {
         content: newVal,
       }).catch((error) => {
         alert(error.message);
