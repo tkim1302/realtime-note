@@ -154,15 +154,17 @@ const Note = () => {
   const handleCursorChange = async (e) => {
     const position = e.target.selectionStart;
     const coordinates = getCaretCoordinates(e.target, position);
-    const noteRef = ref(db, `notes/${noteId}/cursors/${user?.uid}`);
+    if (noteId) {
+      const noteRef = ref(db, `notes/${noteId}/cursors/${user?.uid}`);
 
-    await set(noteRef, {
-      name: user?.displayName,
-      cursorPositionX: coordinates.left,
-      cursorPositionY: coordinates.top,
-    }).catch((error) => {
-      alert(error.message);
-    });
+      await set(noteRef, {
+        name: user?.displayName,
+        cursorPositionX: coordinates.left,
+        cursorPositionY: coordinates.top,
+      }).catch((error) => {
+        alert(error.message);
+      });
+    }
   };
 
   return (
