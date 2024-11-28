@@ -20,7 +20,7 @@ const NoteList = () => {
   const initialPage = Number(queryParams.get("page") || 1);
   const [currPage, setCurrPage] = useState(initialPage);
 
-  const notesPerPage = 9;
+  const notesPerPage = 6;
 
   useEffect(() => {
     const listRef = ref(db, "notes/");
@@ -59,14 +59,14 @@ const NoteList = () => {
   return (
     <div className="h-screen flex flex-col">
       <Header />
-      <div className="flex justify-center mt-12 gap h-full">
+      <div className="flex justify-center mt-12 h-full">
         <div className="flex flex-col">
           <div>
             {isLoading ? (
               <Loading />
             ) : currPageNotes.length > 0 ? (
               <div>
-                <div className="grid grid-cols-3 gap-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
                   {currPageNotes.map(([noteId, note]) => (
                     <div
                       key={noteId}
@@ -80,7 +80,7 @@ const NoteList = () => {
                   ))}
                 </div>
 
-                <div className="flex justify-center mt-6">
+                <div className="flex justify-center mt-6 mb-6">
                   <PageButton
                     totalPages={totalPages}
                     currPage={currPage}
