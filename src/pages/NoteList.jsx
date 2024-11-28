@@ -30,9 +30,9 @@ const NoteList = () => {
         const data = snapshot.val();
 
         if (data) {
-          const noteList = Object.entries(data).filter(([, note]) =>
-            note.users.includes(user.uid)
-          );
+          const noteList = Object.entries(data)
+            .filter(([, note]) => note.users.includes(user.uid))
+            .reverse();
           setNotes(noteList);
           setIsLoading(false);
           navigate(`?page=${initialPage}`);
