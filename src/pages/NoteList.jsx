@@ -60,7 +60,7 @@ const NoteList = () => {
     <div className="h-screen flex flex-col">
       <Header />
       <div className="flex justify-center mt-12 h-full">
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-center">
           <div>
             {isLoading ? (
               <Loading />
