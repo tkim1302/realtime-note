@@ -99,7 +99,7 @@ const NoteList = () => {
             <div className="flex justify-end">
               <button
                 className="bg-blue-500 w-36 h-12 rounded-xl"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/")}
               >
                 Back
               </button>

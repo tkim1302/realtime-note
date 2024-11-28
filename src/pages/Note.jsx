@@ -208,9 +208,9 @@ const Note = () => {
           </button>
           <button
             className="bg-blue-500 w-24 h-16 rounded-xl"
-            onClick={() => navigate("/note/list")}
+            onClick={() => navigate("/")}
           >
-            Note List
+            Back
           </button>
         </div>
       </div>
