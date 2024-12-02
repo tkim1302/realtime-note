@@ -1,4 +1,65 @@
-# RealTime Note: 문서 협업 툴
+
+## Table of Contents
+1. [English Ver](#english-ver)
+2. [Korean Ver](#korean-ver)
+
+## English Ver
+
+# RealTime-Note: Collaborative Dcoument Tool
+
+RealTime-Note is a program that not only allows document storage but also enables real-time collaboration with colleagues on documentation editing.
+
+# Deployment Link
+https://realtime-note7.netlify.app/
+
+# Key Features
+### Document Storage
+Realtime-Note supports real-time data storage:
+- Save documents using Save button.
+- Auto-save every 20 seconds to minimize data loss.
+- Update saved documents.
+- View a list of documents saved by each account.
+
+### Realtime Document Collaboration
+Realtime-Note also supports real-time collaboration with others:
+- Login feature: Login with a Google account.
+- Display of a real-time collaborator.
+- Real-time updates for document modifications made by collaborators.
+- Real-time display of collaborator's cursor position on the screen.
+
+# 시작하기
+### Install dependencies
+```
+npm install
+```
+### Run the project.
+```
+npm run dev
+```
+This command runs the program in development mode. To view it in a browser, go to http://localhost:5173/. The page will reload when changes are made. Additionally, lint errors will be visible in the console.
+
+# How to Use
+- Visit the website and log in with your google account.
+- Once logged in, click the `New Note` button to create a new document.
+- Documents are automatically saved every 20 seconds, and you can manually save them using the `Save` button.
+- When a document is saved, a unique link is generated. You can check it in the current page's url. Share this link to collaborate with a teammate.
+- To access the link, collaborats also need to log in. After logging in, they will automatically join the document and gain editing and saving permissions.
+- Users can see who is currently collaborating in real time on the screen.
+- The collaborator's cursor position is displayed on the screen in real time.
+- Click the `Note List` button to view the documents saved under the current account.
+- On the `Note List` page, you can click on any doumentation to view and edit it.
+
+# Conclusion
+By using RealTime-Note, you can enhance work efficiency in the following ways:
+1. Its intuitive UI and fast data saving allow you to quickly create notes whenever and whereever needed.
+2. The auto-save feature minimizes the risk of data loss.
+3. Real-time updates ensure seamless collaboration with colleagues.
+4. You can access and edit all saved notes whenever necessary.
+
+
+## Korean Ver
+
+# RealTime-Note: 문서 협업 툴
 
 RealTime Note는 단순 문서 저장 뿐 아니라, 동료와 협업하여 실시간 문서 작업을 할 수 있게 해주는 프로그램입니다.
 
