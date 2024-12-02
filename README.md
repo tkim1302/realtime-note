@@ -1,9 +1,9 @@
 
 ## Table of Contents
-1. [English Ver](#english-ver)
-2. [Korean Ver](#korean-ver)
+1. [English Ver.](#english-ver)
+2. [Korean Ver.](#korean-ver)
 
-## English Ver
+## English Ver.
 
 # RealTime-Note: Collaborative Dcoument Tool
 
@@ -27,7 +27,7 @@ Realtime-Note also supports real-time collaboration with others:
 - Real-time updates for document modifications made by collaborators.
 - Real-time display of collaborator's cursor position on the screen.
 
-# 시작하기
+# Getting Started
 ### Install dependencies
 ```
 npm install
@@ -42,7 +42,7 @@ This command runs the program in development mode. To view it in a browser, go t
 - Visit the website and log in with your google account.
 - Once logged in, click the `New Note` button to create a new document.
 - Documents are automatically saved every 20 seconds, and you can manually save them using the `Save` button.
-- When a document is saved, a unique link is generated. You can check it in the current page's url. Share this link to collaborate with a teammate.
+- When a document is saved, **a unique link is generated**. You can check it in the current page's url. Share this link to collaborate with a teammate.
 - To access the link, collaborats also need to log in. After logging in, they will automatically join the document and gain editing and saving permissions.
 - Users can see who is currently collaborating in real time on the screen.
 - The collaborator's cursor position is displayed on the screen in real time.
@@ -57,7 +57,7 @@ By using RealTime-Note, you can enhance work efficiency in the following ways:
 4. You can access and edit all saved notes whenever necessary.
 
 
-## Korean Ver
+## Korean Ver.
 
 # RealTime-Note: 문서 협업 툴
 
