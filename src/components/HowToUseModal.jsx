@@ -37,8 +37,8 @@ const HowToUseModal = ({ setIsModalOpen }) => {
           <div>
             <p className="text-xl font-bold">3. Collaborate in Real-Time!</p>
             <p className="text-lg">
-              You&apos;re all set! See <span>who&apos;s collaborating</span>
-              and track their <span>cursor positions</span> with ease!
+              You&apos;re all set! See <span>who&apos;s collaborating</span> and
+              track their <span>cursor positions</span> with ease!
             </p>
           </div>
           <p className="font-semibold">
