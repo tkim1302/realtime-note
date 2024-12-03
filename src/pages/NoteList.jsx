@@ -101,7 +101,7 @@ const NoteList = () => {
                 className="bg-blue-500 w-36 h-12 rounded-xl"
                 onClick={() => navigate("/")}
               >
-                Back
+                Home
               </button>
             </div>
           )}
