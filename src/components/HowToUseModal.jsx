@@ -22,8 +22,8 @@ const HowToUseModal = ({ setIsModalOpen }) => {
             <p className="text-xl font-bold">1. Get your unique URL:</p>
             <p className="text-lg">
               After saving a new note, <span>a unique URL</span> will be
-              generate and displayed in the browser&apos;s address bar. This URL
-              represents your note.
+              generated and displayed in the browser&apos;s address bar. This
+              URL represents your note.
             </p>
           </div>
           <div>
