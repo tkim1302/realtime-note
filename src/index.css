@@ -22,3 +22,8 @@ body {
   display: inline-block;
   animation: rotate 1s linear infinite;
 }
+
+span {
+  font-weight: bold;
+  color: #2563eb;
+}
