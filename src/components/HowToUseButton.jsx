@@ -8,7 +8,7 @@ const HowToUseButton = () => {
     <div>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="h-6 w-6 rounded-full bg-purple-500 text-white absolute top-2 right-0"
+        className=" h-6 w-6 rounded-full bg-purple-500 text-white absolute top-14 right-5"
       >
         ?
       </button>

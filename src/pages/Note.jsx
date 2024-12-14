@@ -177,16 +177,15 @@ const Note = () => {
             <SavedNotification />
           </div>
         )}
-        <div>
-          <div className="relative w-[30rem] h-96 flex justify-center">
+        <div className="relative h-[30rem] w-[35rem] flex justify-center items-center">
+          <div className="relative w-96 h-96 flex justify-center">
             <textarea
-              className="border border-black w-96 h-96 text-left align-top caret-red-500 pl-5 pt-5 pb-5 pr-5 rounded-xl text-black"
+              className="border border-black w-96 h-96 text-left align-top p-5 caret-red-500  rounded-xl text-black"
               type="text"
               value={liveValue}
               onChange={(e) => liveChange(e)}
               onSelect={handleCursorChange}
-            />
-            <HowToUseButton />
+            ></textarea>
             {userName && (
               <div
                 className="absolute"
@@ -199,6 +198,7 @@ const Note = () => {
               </div>
             )}
           </div>
+          <HowToUseButton />
         </div>
         {userName && (
           <div className="text-gray-100 font-bold text-xl">
